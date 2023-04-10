@@ -1,6 +1,8 @@
 from django.db import models
+from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator
 
-
+ 
 # ----- STAFF RELATED TABLES -----
 
 class Staff(models.Model):
@@ -14,12 +16,18 @@ class Staff(models.Model):
     emp_type_id = models.ForeignKey('Emp_Type', on_delete=models.CASCADE)
     f_name = models.CharField(max_length=20, null=False)
     l_name = models.CharField(max_length=20, null=False)
-    phone = models.PositiveIntegerField(null=True, blank=True)
+    phone = models.PositiveBigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], null=True, blank=True)
     address = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(max_length=250, null=False)
     emp_status = models.CharField(max_length=50,
                                   choices=empStatusChoices,
                                   default='Active')
+    
+    def __str__(self) -> str:
+        return self.l_name
+
+    def __int__(self) -> int:
+        return self.phone   
 
 class Emp_Type(models.Model):
     emp_type_id = models.CharField(max_length=5, primary_key=True)
@@ -56,24 +64,51 @@ class Ext_Maint(models.Model):
 # ----- EXTINGUISHER TABLES -----
 
 class Extinguisher(models.Model):
+    # boxSizes = [
+    #     ('5', 'Small box'),
+    #     ('10', 'Large box')
+    # ]
+    
     ext_id = models.CharField(max_length=10, primary_key=True)
-    tag_id = models.ForeignKey('Ext_Tag', on_delete=models.CASCADE)
+    # tag_id = models.ForeignKey('Ext_Tag', on_delete=models.CASCADE)
     floor = models.PositiveIntegerField()
     box_id = models.ForeignKey('Box', on_delete=models.CASCADE)
-    
-class Ext_Tag(models.Model):
+    type_id = models.ForeignKey('Ext_Type', on_delete=models.CASCADE)
+    size_ID = models.ForeignKey('BoxSizes', on_delete=models.CASCADE)    # This is to create a new table for the box size
+    # size = models.CharField(max_length=2,
+    #                         choices=boxSizes,
+    #                         default=None)  # May need to fix this, not sure if 'None" is right
+    status_id = models.ForeignKey('Ext_Status', on_delete=models.CASCADE)
 
+class Ext_Model(models.Model):
+    ext_model_id = models.CharField(max_length=10, primary_key=True)
+    box_id = models.ForeignKey('Box', on_delete=models.CASCADE)
+    ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
+
+class BoxSizes(models.Model):
     boxSizes = [
         ('5', 'Small box'),
         ('10', 'Large box')
     ]
 
-    tag_id = models.CharField(max_length=10, primary_key=True)
-    type_id = models.ForeignKey('Ext_Type', on_delete=models.CASCADE)
+    size_ID = models.PositiveSmallIntegerField(primary_key=True)
     size = models.CharField(max_length=2,
                             choices=boxSizes,
                             default=None)  # May need to fix this, not sure if 'None" is right
-    status_id = models.ForeignKey('Ext_Status', on_delete=models.CASCADE)
+
+# class Ext_Tag(models.Model):
+
+#     # boxSizes = [
+#     #     ('5', 'Small box'),
+#     #     ('10', 'Large box')
+#     # ]
+
+#     tag_id = models.CharField(max_length=10, primary_key=True)
+#     type_id = models.ForeignKey('Ext_Type', on_delete=models.CASCADE)
+#     size = models.CharField(max_length=2,
+#                             choices=boxSizes,
+#                             default=None)  # May need to fix this, not sure if 'None" is right
+#     status_id = models.ForeignKey('Ext_Status', on_delete=models.CASCADE)
 
 class Ext_Status(models.Model):
     status_id = models.PositiveSmallIntegerField(primary_key=True)
@@ -88,7 +123,7 @@ class Insp_Status(models.Model):
         ('Pass', 'Extinguisher has 100% Pass'),
         ('Fail', 'Extinguisher did not 100% Pass')
     ]
-
+    
     insp_status = models.PositiveSmallIntegerField(primary_key=True)
     stat_desc = models.CharField(max_length=4,
                                  choices=descriptions,
@@ -104,10 +139,12 @@ class Box(models.Model):
     box_id = models.PositiveSmallIntegerField(primary_key=True)
     box_num = models.PositiveSmallIntegerField()
     box_size = models.PositiveSmallIntegerField()
-    location = models.PositiveSmallIntegerField()
+    # location = models.PositiveSmallIntegerField()   # Likely going to delete this for the x/y axis bit
     status_id = models.ForeignKey('Ext_Status', on_delete=models.CASCADE)
     build_id = models.ForeignKey('Building', on_delete=models.CASCADE)
-
+    x_axis = models.PositiveIntegerField()
+    y_axis = models.PositiveIntegerField()
+    
 class Box_Status(models.Model):
     status_id = models.PositiveSmallIntegerField(primary_key=True)
     log_by = models.CharField(max_length=5)
@@ -116,6 +153,7 @@ class Box_Status(models.Model):
     comp_by = models.CharField(max_length=5, null=True, blank=True)
     comp_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
 
+
 class Building(models.Model):
     build_id = models.CharField(max_length=10, primary_key=True)
     build_name = models.CharField(max_length=100)
@@ -123,6 +161,12 @@ class Building(models.Model):
     num_floors = models.PositiveSmallIntegerField()
     num_ext = models.PositiveSmallIntegerField()
     num_boxes = models.PositiveSmallIntegerField()
+    layout_id = models.ForeignKey('Floor_Plan', on_delete=models.CASCADE)
+
+class Floor_Plan(models.Model):
+    layout_id = models.CharField(max_length=10, primary_key=True)
+    floor = models.PositiveSmallIntegerField()
+    file_txt = models.ImageField() # I need to figure out how to update a txt.file for this part
 
 # ----- WAREHOUSE OPS AND TECHNICIAN RELATED TABLES -----
 
