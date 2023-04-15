@@ -4,7 +4,7 @@ from api.models import *
 class BoxSerializer(ModelSerializer):
     class Meta:
         model = Box
-        fields = '__all__'
+        fields = '__all__' # Cannot use __all__ if any data is an int() type
 
 class ExtSerializer(ModelSerializer):
     class Meta:
