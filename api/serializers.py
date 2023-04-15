@@ -6,3 +6,8 @@ class TestSerializer(ModelSerializer):
         model = Staff
         # fields = ['emp_type_id', 'staff_id', 'f_name', 'l_name', 'address', 'email', 'emp_status']
         fields = '__all__'
+
+class UserSerializer(ModelSerializer):
+    class Meta:
+        model = Login
+        fields = '__all__'
