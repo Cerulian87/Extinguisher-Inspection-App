@@ -19,21 +19,13 @@ class Staff(models.Model):
     staff_id = models.CharField(max_length=5, primary_key=True)
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
-    # f_name = models.CharField(max_length=20, null=False)
-    # l_name = models.CharField(max_length=20, null=False)
-    # phone = models.PositiveBigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], null=True, blank=True)
-    # phone = models.CharField(max_length=10, null=True, blank=True) # Here's a fix for the API int type issue
-    # address = models.CharField(max_length=50, null=True, blank=True)
-    # email = models.EmailField(max_length=250, null=False)
     emp_status = models.CharField(max_length=50,
                                   choices=empStatusChoices,
                                   default='Active')
-    
-    def __str__(self) -> str:
-        return self.username
 
-    def __int__(self) -> str:
-        return self.emp_type_id   
+    def __str__(self) -> str:
+        return self.staff_id
+ 
 
 class EmpType(models.Model):
     emp_type_id = models.CharField(max_length=5, primary_key=True)

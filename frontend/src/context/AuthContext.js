@@ -16,6 +16,47 @@ export const AuthProvider = ({ children }) => {
 
     const navigate = useNavigate()
 
+// const jwt = require('jsonwebtoken');
+
+// let loginUser = async (e) => {
+//     e.preventDefault()
+//     // console.log('Form Submitted')
+//     let response = await fetch('http://127.0.0.1:8000/api/token/', {
+//         method: 'POST',
+//         headers: {
+//             'content-Type': 'application/json'
+//         },
+//         body: JSON.stringify({'username': e.target.username.value, 'password': e.target.password.value})
+//     })
+//     let data = await response.json()
+//     if (response.status === 200){
+//         // Retrieve empType from the database based on the user's credentials
+//         const empType = await getEmpTypeFromDatabase(e.target.username.value);
+
+//         // Create a JWT token with the user's information and empType
+//         const token = jwt.sign({
+//             username: e.target.username.value,
+//             empType: empType
+//         }, 'secret_key');
+
+//         // Set the authentication tokens and navigate the user to the appropriate page
+//         setAuthTokens({access: token});
+//         setUser(jwt_decode(token));
+//         localStorage.setItem('authTokens', JSON.stringify({access: token}));
+
+//         // Conditionally redirect the user based on their empType
+//         if (empType === 'admin') {
+//             navigate('/admin');
+//         } else if (empType === 'manager') {
+//             navigate('/manager');
+//         } else {
+//             navigate('/');
+//         }
+//     } else {
+//         alert('Something went wrong!')
+//     }
+// }
+
     let loginUser = async (e) => {
         e.preventDefault()
         // console.log('Form Submitted')
@@ -31,7 +72,23 @@ export const AuthProvider = ({ children }) => {
             setAuthTokens(data)
             setUser(jwt_decode(data.access))
             localStorage.setItem('authTokens', JSON.stringify(data))
+
+            // Retrieve emptype from decoded JWT token... hopefully
+            const decodedToken = jwt_decode(data.access);
+            const eType = decodedToken.emptype;
+
+            // Redirect to emp page
+            if (eType === 'Inspector') {
+                navigate('/inspectorpage');
+            } else if (eType === 'Technician') {
+                navigate('/technicianpage')
+            } else if (eType === 'Maintenance') {
+                navigate('/maintainerpage')
+            } else if (eType === 'Supervisor') {
+                navigate('supervisorpage')
+            } else {
             navigate('/');
+            }
         } else {
             alert('Something went wrong!')
         }

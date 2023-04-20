@@ -1,8 +1,24 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import *
 
 # Register your models here.
+class EmpTypeInline(admin.StackedInline):
+    model = EmpType
+    can_delete = False
+    verbose_name_plural = "EmpType"
 
+class StaffInline(admin.StackedInline):
+    model = Staff
+    can_delete = False
+    verbose_name_plural = "Staff"
+    inlines = [EmpTypeInline]
+
+class UserAdmin(BaseUserAdmin):
+    inlines = [StaffInline]
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 admin.site.register(Staff)
 admin.site.register(EmpType)
 admin.site.register(Checklist)

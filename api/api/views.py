@@ -15,7 +15,21 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         # Add custom claims
         token['username'] = user.username
-        # ...
+        token['first_name'] = user.first_name
+
+        staff = Staff.objects.filter(username=user).first()
+        emp_type = None
+
+        if staff:
+            emp_type = staff.emp_type_id
+            token['staff'] = {
+                'staff_id': staff.staff_id,
+                'status': staff.emp_status,
+                }
+        
+        if emp_type:
+            token['emptype'] = emp_type.role_desc
+
 
         return token
     
