@@ -4,8 +4,10 @@ from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.core.validators import MaxValueValidator
 
- 
 # ----- STAFF RELATED TABLES -----
+
+
+
 
 class Staff(models.Model):
 
@@ -16,21 +18,22 @@ class Staff(models.Model):
 
     staff_id = models.CharField(max_length=5, primary_key=True)
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
-    f_name = models.CharField(max_length=20, null=False)
-    l_name = models.CharField(max_length=20, null=False)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
+    # f_name = models.CharField(max_length=20, null=False)
+    # l_name = models.CharField(max_length=20, null=False)
     # phone = models.PositiveBigIntegerField(validators=[MinValueValidator(0), MaxValueValidator(9999999999)], null=True, blank=True)
-    phone = models.CharField(max_length=10, null=True, blank=True) # Here's a fix for the API int type issue
-    address = models.CharField(max_length=50, null=True, blank=True)
-    email = models.EmailField(max_length=250, null=False)
+    # phone = models.CharField(max_length=10, null=True, blank=True) # Here's a fix for the API int type issue
+    # address = models.CharField(max_length=50, null=True, blank=True)
+    # email = models.EmailField(max_length=250, null=False)
     emp_status = models.CharField(max_length=50,
                                   choices=empStatusChoices,
                                   default='Active')
     
-    def __str__(self) -> str:
-        return self.l_name
+    # def __str__(self) -> str:
+    #     return self.l_name
 
-    def __int__(self) -> int:
-        return self.phone   
+    # def __int__(self) -> int:
+    #     return self.phone   
 
 class EmpType(models.Model):
     emp_type_id = models.CharField(max_length=5, primary_key=True)
@@ -40,13 +43,15 @@ class Checklist(models.Model):
     # checklist_id = models.PositiveIntegerField(primary_key=True, default=1)
     checklist_id = models.CharField(max_length=5, primary_key=True, default=1) # Here's a fix for the API int type issue
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
-    list_item = models.CharField(max_length=150)
+    list_item = models.CharField(max_length=1500)
+    file_txt = models.ImageField(null=True, blank=True) # I need to figure out how to update a txt.file for this part
 
 # ----- EXTINGUISHER MAINTENANCE RELATED TABLES -----
 
 class MaintStaff(models.Model):
     maint_id = models.CharField(max_length=10, primary_key=True)
-    staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
+    # staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)    # Possibly change back to staff_id
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
     box_maint_id = models.ForeignKey('BoxMaint', on_delete=models.CASCADE)
     ext_maint_id = models.ForeignKey('ExtMaint', on_delete=models.CASCADE)
@@ -55,14 +60,15 @@ class BoxMaint(models.Model):
     box_maint_id = models.CharField(max_length=10, primary_key=True)
     disc_date_time = models.DateTimeField(auto_now_add=True, null=False) 
     fix_date_time = models.DateField(auto_now=True, null=True, blank=True)
-    fix_by = models.CharField(max_length=5, null=True, blank=True)   
+    # fix_by = models.CharField(max_length=5, null=True, blank=True) # Need to add the username to this field
+    fix_by = models.ForeignKey(User, on_delete=models.CASCADE)   
     notes = models.TextField(max_length=500, null=True, blank=True)
 
 class ExtMaint(models.Model):
     ext_maint_id = models.CharField(max_length=10, primary_key=True)
     fail_date_time = models.DateTimeField(auto_now_add=True)
     replace_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
-    replace_by = models.CharField(max_length=5, null=True, blank=True)
+    replace_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
 
 # ----- EXTINGUISHER TABLES -----
@@ -119,7 +125,7 @@ class BoxSizes(models.Model):
 class ExtStatus(models.Model):
     # status_id = models.PositiveSmallIntegerField(primary_key=True)
     status_id = models.CharField(max_length=5, primary_key=True) # Here's a fix for the API int type issue
-    staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
+    # staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     data_time = models.DateTimeField(auto_now=True, null=True, blank=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
@@ -162,10 +168,11 @@ class Box(models.Model):
 class BoxStatus(models.Model):
     # status_id = models.PositiveSmallIntegerField(primary_key=True)
     status_id = models.CharField(max_length=5, primary_key=True)
-    log_by = models.CharField(max_length=5)
+    log_by = models.ForeignKey(User, on_delete=models.CASCADE)
     disc_date_time = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
-    comp_by = models.CharField(max_length=5, null=True, blank=True)
+    # comp_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    comp_by = models.CharField(max_length=100, null=True, blank=True)
     comp_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
 
 
@@ -192,11 +199,12 @@ class FloorPlan(models.Model):
 class WareOps(models.Model):
     w_ext_id = models.CharField(max_length=5, primary_key=True)
     ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
-    rec_by = models.CharField(max_length=10)
+    rec_by = models.ForeignKey(User, on_delete=models.CASCADE)
     rec_date_time = models.DateTimeField(auto_now_add=True)
     # insp_s_id = models.PositiveSmallIntegerField(null=True, blank=True)
     insp_s_id = models.CharField(max_length=10, null=True, blank=True)
-    insp_by = models.CharField(max_length=5, null=True, blank=True)
+    # insp_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    insp_by = models.CharField(max_length=100, null=True, blank=True)
     insp_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
 
 class EOLExt(models.Model):
@@ -228,27 +236,28 @@ class ReadyExt(models.Model):
 
 # ----- USER LOGIN RELATED TABLES -----
 
-class Login(models.Model):
-    login_id = models.CharField(max_length=30, primary_key=True)
-    # login_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    # username = models.CharField(max_length=30, unique=True)
-    username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-    password = models.CharField(max_length=30)
-    email = models.EmailField(max_length=150)
-    staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
-    auth_id = models.ForeignKey('Auth', on_delete=models.CASCADE)
-    c_date = models.DateTimeField(auto_now_add=True)
+# class Login(models.Model):
+#     login_id = models.CharField(max_length=30, primary_key=True)
+#     # login_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+#     # username = models.CharField(max_length=30, unique=True)
+#     username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+#     password = models.CharField(max_length=30)
+#     email = models.EmailField(max_length=150)
+#     staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
+#     # auth_id = models.ForeignKey('Auth', on_delete=models.CASCADE)
+#     c_date = models.DateTimeField(auto_now_add=True)
 
     
 
-class Auth(models.Model):
-    auth_id = models.CharField(max_length=5, primary_key=True)
-    auth_type = models.CharField(max_length=20)
+# class Auth(models.Model):
+#     auth_id = models.CharField(max_length=5, primary_key=True)
+#     auth_type = models.CharField(max_length=20)
 
 class CLog(models.Model):
     # c_log_id = models.PositiveSmallIntegerField(primary_key=True)
     c_log_id = models.CharField(max_length=10, primary_key=True)
-    login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
+    # login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
+    username = models.ForeignKey(User, on_delete=models.CASCADE)
     t_changed = models.CharField(max_length=30) # Table changed
     i_changed = models.CharField(max_length=30) # Row changed
     change_date_time = models.DateTimeField(auto_now_add=True)

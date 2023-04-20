@@ -1,6 +1,9 @@
 from rest_framework.serializers import ModelSerializer
 from api.models import *
 
+# ----- Thus far, these serializers are for testing purposes and are irrelevant -----
+
+
 class BoxSerializer(ModelSerializer):
     class Meta:
         model = Box
