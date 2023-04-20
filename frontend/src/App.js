@@ -10,6 +10,7 @@ import Inspection from './pages/Inspection'
 import MaintainerPage from './pages/MaintainerPage'
 import SupervisorPage from './pages/SupervisorPage'
 import TechnicianPage from './pages/TechnicianPage'
+import RegisterPage from './pages/RegisterPage';
 
 
 function App() {
@@ -34,6 +35,7 @@ function App() {
             <Route element={<PrivateRoute><SupervisorPage/></PrivateRoute>} path='/supervisorpage' exact/>
             <Route element={<PrivateRoute><TechnicianPage/></PrivateRoute>} path='/technicianpage' exact/>
             <Route element={<LoginPage/>} path='/login' />
+            <Route element={<RegisterPage/>} path='/register' />
           </Routes>
           </AuthProvider>
         </Router>
