@@ -29,22 +29,30 @@ class Staff(models.Model):
                                   choices=empStatusChoices,
                                   default='Active')
     
-    # def __str__(self) -> str:
-    #     return self.l_name
+    def __str__(self) -> str:
+        return self.username
 
-    # def __int__(self) -> int:
-    #     return self.phone   
+    def __int__(self) -> str:
+        return self.emp_type_id   
 
 class EmpType(models.Model):
     emp_type_id = models.CharField(max_length=5, primary_key=True)
     role_desc = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.role_desc
+
 class Checklist(models.Model):
+
+
     # checklist_id = models.PositiveIntegerField(primary_key=True, default=1)
     checklist_id = models.CharField(max_length=5, primary_key=True, default=1) # Here's a fix for the API int type issue
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
     list_item = models.CharField(max_length=1500)
-    file_txt = models.ImageField(null=True, blank=True) # I need to figure out how to update a txt.file for this part
+    file_txt = models.ImageField(upload_to='images/', null=True, blank=True) # I need to figure out how to update a txt.file for this part
+
+    def __str__(self):
+        return self.list_item
 
 # ----- EXTINGUISHER MAINTENANCE RELATED TABLES -----
 
@@ -108,6 +116,8 @@ class BoxSizes(models.Model):
                             choices=boxSizes,
                             default=None)  # May need to fix this, not sure if 'None" is right
 
+    def __str__(self):
+        return self.size
 # class Ext_Tag(models.Model):
 
 #     # boxSizes = [
@@ -148,6 +158,9 @@ class ExtType(models.Model):
     type_id = models.CharField(max_length=15, primary_key=True)
     type_desc = models.CharField(max_length=30)
 
+    def __str__(self):
+        return self.type_desc
+
 # ----- EXTINGUISHER BOX RELATED TABLES -----
 
 class Box(models.Model):
@@ -164,7 +177,10 @@ class Box(models.Model):
     # x_axis = models.PositiveIntegerField()
     x_axis = models.CharField(max_length=10)
     y_axis = models.CharField(max_length=10)
-    
+
+    def __str__(self):
+        return self.box_num
+
 class BoxStatus(models.Model):
     # status_id = models.PositiveSmallIntegerField(primary_key=True)
     status_id = models.CharField(max_length=5, primary_key=True)
@@ -188,11 +204,18 @@ class Building(models.Model):
     num_boxes = models.CharField(max_length=5)
     layout_id = models.ForeignKey('FloorPlan', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.build_name
+
 class FloorPlan(models.Model):
     layout_id = models.CharField(max_length=10, primary_key=True)
     # floor = models.PositiveSmallIntegerField()
     floor = models.CharField(max_length=5)
     file_txt = models.ImageField() # I need to figure out how to update a txt.file for this part
+
+    def __str__(self):
+        return self.floor
+
 
 # ----- WAREHOUSE OPS AND TECHNICIAN RELATED TABLES -----
 
