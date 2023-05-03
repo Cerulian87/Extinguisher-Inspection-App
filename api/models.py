@@ -24,7 +24,8 @@ class Staff(models.Model):
                                   default='Active')
 
     def __str__(self) -> str:
-        return self.staff_id
+        return f"{self.username}, {self.emp_type_id}"
+        # return f"{self.username.first_name}"
  
 
 class EmpType(models.Model):
@@ -33,6 +34,14 @@ class EmpType(models.Model):
 
     def __str__(self):
         return self.role_desc
+
+class InspectorAssignments(models.Model):
+    username = models.CharField(max_length=100)
+    ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.ext_id} : {self.username}"
+    
 
 class Checklist(models.Model):
 
@@ -91,6 +100,9 @@ class Extinguisher(models.Model):
     #                         default=None)  # May need to fix this, not sure if 'None" is right
     status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Extinguisher: {self.ext_id} | {self.box_id}"
+    
 class ExtModel(models.Model):
     ext_model_id = models.CharField(max_length=10, primary_key=True)
     box_id = models.ForeignKey('Box', on_delete=models.CASCADE)
@@ -132,6 +144,9 @@ class ExtStatus(models.Model):
     data_time = models.DateTimeField(auto_now=True, null=True, blank=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
     insp_status = models.ForeignKey('InspStatus', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.insp_status}"
     
 class InspStatus(models.Model):
 
@@ -145,6 +160,9 @@ class InspStatus(models.Model):
     stat_desc = models.CharField(max_length=4,
                                  choices=descriptions,
                                  default=None)
+    
+    def __str__(self):
+        return self.insp_status
 
 class ExtType(models.Model):
     type_id = models.CharField(max_length=15, primary_key=True)
@@ -171,7 +189,7 @@ class Box(models.Model):
     y_axis = models.CharField(max_length=10)
 
     def __str__(self):
-        return self.box_num
+        return f"Box: {self.box_id}"
 
 class BoxStatus(models.Model):
     # status_id = models.PositiveSmallIntegerField(primary_key=True)
