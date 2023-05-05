@@ -32,11 +32,12 @@ const HomePage = () => {
         <p><Link to="/supervisorpage">Supervisor Page</Link></p>
         <p><Link to="/technicianpage">Technician Page</Link></p>
 
-        <ul>
+        {/* This below is for testing purposes */}
+        {/* <ul>
             {extstatuses.map((extstatus, id) => (
                 <li key={id}>{extstatus.notes}</li>
             ))}
-        </ul>
+        </ul> */}
     </div>
   )
 }

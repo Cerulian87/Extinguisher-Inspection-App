@@ -2,7 +2,14 @@ import React from 'react'
 
 const TechnicianPage = () => {
   return (
-    <div>TechnicianPage</div>
+    <div>
+      <div>
+        <h1>
+          TechnicianPage
+          </h1>
+          </div>
+      
+      </div>
   )
 }
 

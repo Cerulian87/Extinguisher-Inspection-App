@@ -160,18 +160,30 @@ const handleInspectorSelect = (inspector) => {
   return (
     <div>
 
-    <div>SupervisorPage</div>
-    <div>Extinguisher Status</div>
+    <div>
+      <h1>
+      SupervisorPage
+      </h1>
+      </div>
+    <div>
+      <h3>
+      Extinguisher Status
+      </h3>
+      </div>
       <select multiple value={selectedExtinguishers} onChange={(e) => setSelectedExtinguishers(Array.from(e.target.selectedOptions, (option) => option.value))}>
   {extinguishers.map((extinguisher, id) => (
-    <option key={id} value={extinguisher.ext_id}>
+    <option key={id} value={extinguisher.ext_id} disabled={extinguisher.status_id === "2"}>
       Extinguisher: {extinguisher.ext_id} | Box: {extinguisher.box_id} {extinguisher.status_id === "1" ? "Good" : "Bad"}
     </option>
   ))}
 </select>
 
     <section>
+      <div>
+      <h3>
       Inspectors
+      </h3>
+      </div>
       <ul>
         
         {inspectors.map((inspector, id) => (

@@ -11,19 +11,15 @@ import MaintainerPage from './pages/MaintainerPage'
 import SupervisorPage from './pages/SupervisorPage'
 import TechnicianPage from './pages/TechnicianPage'
 import RegisterPage from './pages/RegisterPage';
+import BoxInspection from './pages/BoxInspection';
+import MaintExtinguisherInspection from './pages/MaintExtinguisherInspection';
+import MaintBoxRepair from './pages/MaintBoxRepair';
 
 
 function App() {
   return (
     <div className="App">
-      {/* <Router>
-        <AuthProvider>
-          <Header />
-        </AuthProvider>
-      </Router> */}
       <header className="App-header">
-       {/* <b>HOME PAGE!</b> */}
-        {/* <LoginForm /> */}
         <Router>
           <AuthProvider>
             <Header />
@@ -31,6 +27,9 @@ function App() {
             <Route element={<PrivateRoute><HomePage/></PrivateRoute>} path='/' exact/>
             <Route element={<PrivateRoute><InspectorPage/></PrivateRoute>} path='/inspectorpage' exact/>
             <Route element={<PrivateRoute><Inspection/></PrivateRoute>} path='/inspection' exact/>
+            <Route element={<PrivateRoute><MaintExtinguisherInspection/></PrivateRoute>} path='/maintExtinguisher' exact/>
+            <Route element={<PrivateRoute><MaintBoxRepair/></PrivateRoute>} path='/maintBox' exact/>
+            <Route element={<PrivateRoute><BoxInspection/></PrivateRoute>} path='/boxInspection' exact/>
             <Route element={<PrivateRoute><MaintainerPage/></PrivateRoute>} path='/maintainerpage' exact/>
             <Route element={<PrivateRoute><SupervisorPage/></PrivateRoute>} path='/supervisorpage' exact/>
             <Route element={<PrivateRoute><TechnicianPage/></PrivateRoute>} path='/technicianpage' exact/>

@@ -38,9 +38,10 @@ const RegisterPage = () => {
             <input type='password' name='password' />
         </label>
         <div>
-        <input type='submit' value='Submit' />
         </div>
     </form>
+    <button>Cancel</button>
+    <button>Submit</button>
     </div>
     </div>
   )

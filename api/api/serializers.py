@@ -30,6 +30,11 @@ class ExtinguisherSerializer(ModelSerializer):
         model = Extinguisher
         fields = '__all__'
 
+class FloorPlanSerializer(ModelSerializer):
+    class Meta:
+        model = FloorPlan
+        fields = '__all__'
+
 # class UserSerializer(ModelSerializer):
 #     class Meta:
 #         model = User

@@ -83,21 +83,12 @@ class ExtMaint(models.Model):
 # ----- EXTINGUISHER TABLES -----
 
 class Extinguisher(models.Model):
-    # boxSizes = [
-    #     ('5', 'Small box'),
-    #     ('10', 'Large box')
-    # ]
     
     ext_id = models.CharField(max_length=10, primary_key=True)
-    # tag_id = models.ForeignKey('Ext_Tag', on_delete=models.CASCADE)
-    # floor = models.PositiveIntegerField()
     floor = models.CharField(max_length=3) # Here's a fix for the API int type issue
     box_id = models.ForeignKey('Box', on_delete=models.CASCADE)
     type_id = models.ForeignKey('ExtType', on_delete=models.CASCADE)
     size_ID = models.ForeignKey('BoxSizes', on_delete=models.CASCADE)    # This is to create a new table for the box size
-    # size = models.CharField(max_length=2,
-    #                         choices=boxSizes,
-    #                         default=None)  # May need to fix this, not sure if 'None" is right
     status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -174,17 +165,11 @@ class ExtType(models.Model):
 # ----- EXTINGUISHER BOX RELATED TABLES -----
 
 class Box(models.Model):
-    # box_id = models.PositiveSmallIntegerField(primary_key=True)
-    # box_num = models.PositiveSmallIntegerField()
-    # box_size = models.PositiveSmallIntegerField()
     box_id = models.CharField(max_length=10, primary_key=True)
     box_num = models.CharField(max_length=10)
     box_size = models.CharField(max_length=10)
-    # location = models.PositiveSmallIntegerField()   # Likely going to delete this for the x/y axis bit
     status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
     build_id = models.ForeignKey('Building', on_delete=models.CASCADE)
-    # x_axis = models.PositiveIntegerField()
-    # x_axis = models.PositiveIntegerField()
     x_axis = models.CharField(max_length=10)
     y_axis = models.CharField(max_length=10)
 

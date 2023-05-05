@@ -52,9 +52,60 @@ def getBox(request):
     serializer = BoxSerializer(box, many=True)
     return Response(serializer.data)
 
+# @api_view(['PATCH'])
+# def update_box_status(request, box_id):
+#     try:
+#         box = Box.objects.get(pk=box_id)
+#     except Box.DoesNotExist:
+#         return Response(status=404)
+
+#     status_id = request.data.get('status_id')
+#     if status_id is not None:
+#         box.status_id = status_id
+#         box.save()
+#         return Response(status=200)
+#     else:
+#         return Response(status=400, data={'message': 'Missing or invalid status_id'})
+
+@api_view(['PATCH'])
+def update_box_status(request, box_id):
+    try:
+        box = Box.objects.get(pk=box_id)
+    except Box.DoesNotExist:
+        return Response(status=404)
+
+    status_id = request.data.get('status_id')
+    if status_id is not None:
+        box.status_id_id = status_id
+        box.save()
+        return Response(status=200)
+    else:
+        return Response(status=400, data={'message': 'Missing or invalid status_id'})
+
+@api_view(['PATCH'])
+def maintExtUpdate(request, ext_id):
+    try:
+        extinguisher = Extinguisher.objects.get(pk=ext_id)
+    except Extinguisher.DoesNotExist:
+        return Response(status=404)
+
+    status_id = request.data.get('status_id')
+    if status_id is not None:
+        extinguisher.status_id_id = status_id
+        extinguisher.save()
+        return Response(status=200)
+    else:
+        return Response(status=400, data={'message': 'Missing or invalid status_id'})
+
 @api_view(['GET'])
 def getExtinguishers(request):
     extinguishers = Extinguisher.objects.all()
+    serializer = ExtinguisherSerializer(extinguishers, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def getExtForBox(request, ext_id):
+    extinguishers = Extinguisher.object.get(ext_id=ext_id)
     serializer = ExtinguisherSerializer(extinguishers, many=True)
     return Response(serializer.data)
 
@@ -94,6 +145,35 @@ def getChecklist(request):
     checklist = Checklist.objects.all()
     serializer = ChecklistSerializer(checklist, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+def getFloorPlan(request):
+    floorplan = FloorPlan.objects.all()
+    serializer = FloorPlanSerializer(floorplan, many=True)
+    return Response(serializer.data)
+
+@api_view(['PATCH'])
+def update_extinguisher_status(request, ext_id):
+    try:
+        extinguisher = Extinguisher.objects.get(ext_id=ext_id)
+    except Extinguisher.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PATCH':
+        # Get the list of selectedOptions from the request
+        selected_options = request.data.get('selectedOptions')
+        if not isinstance(selected_options, list):
+            return Response({'error': 'selectedOptions must be a list'}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if any selected option is "fail"
+        is_any_fail = any(option == 'fail' for option in selected_options)
+        # Set the status_id based on whether any option is fail or not
+        status_id = "2" if is_any_fail else "1"
+        # Update the extinguisher status_id
+        extinguisher.status_id_id = status_id
+        extinguisher.save()
+        return Response(status=status.HTTP_200_OK)
+
+    return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
 
 
