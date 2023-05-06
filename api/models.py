@@ -41,6 +41,14 @@ class InspectorAssignments(models.Model):
 
     def __str__(self):
         return f"{self.ext_id} : {self.username}"
+
+# This is a test model for technicians to recieve a bad extinguisher 
+class TechAssignments(models.Model):
+    ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
+    status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.ext_id}"
     
 
 class Checklist(models.Model):

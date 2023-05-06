@@ -14,6 +14,7 @@ import RegisterPage from './pages/RegisterPage';
 import BoxInspection from './pages/BoxInspection';
 import MaintExtinguisherInspection from './pages/MaintExtinguisherInspection';
 import MaintBoxRepair from './pages/MaintBoxRepair';
+import TechInspectionPage from './pages/TechInspectionPage';
 
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
             <Route element={<PrivateRoute><MaintainerPage/></PrivateRoute>} path='/maintainerpage' exact/>
             <Route element={<PrivateRoute><SupervisorPage/></PrivateRoute>} path='/supervisorpage' exact/>
             <Route element={<PrivateRoute><TechnicianPage/></PrivateRoute>} path='/technicianpage' exact/>
+            <Route element={<PrivateRoute><TechInspectionPage/></PrivateRoute>} path='/techInspectionPage' exact/>
             <Route element={<LoginPage/>} path='/login' />
             <Route element={<RegisterPage/>} path='/register' />
           </Routes>

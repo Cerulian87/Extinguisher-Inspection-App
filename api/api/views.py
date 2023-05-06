@@ -109,6 +109,12 @@ def getExtForBox(request, ext_id):
     serializer = ExtinguisherSerializer(extinguishers, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def getTechExtinguishers(request):
+    extinguishers = TechAssignments.objects.all()
+    serializer = TechExtSerializer(extinguishers, many=True)
+    return Response(serializer.data)
+
 # This is for testing in order to retrieve entries specific to a user
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])

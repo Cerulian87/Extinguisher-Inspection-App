@@ -15,6 +15,11 @@ class ExtSerializer(ModelSerializer):
         model = ExtStatus
         fields = '__all__'
 
+class TechExtSerializer(ModelSerializer):
+    class Meta:
+        model = TechAssignments
+        fields = '__all__'
+
 class NoteSerializer(ModelSerializer):
     class Meta:
         model = Note
