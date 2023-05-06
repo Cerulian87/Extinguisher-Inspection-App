@@ -44,8 +44,18 @@ class InspectorAssignments(models.Model):
 
 # This is a test model for technicians to recieve a bad extinguisher 
 class TechAssignments(models.Model):
+
+    warehouseStatuses = [
+        ('Pending', 'Has not been inspected yet'),
+        ('Pass', 'Passed Warehouse inspection'),
+        ('Fail', 'Send to End of Life')
+    ]
+
     ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
     status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
+    warehouse_status = models.CharField(max_length=50,
+                                  choices=warehouseStatuses,
+                                  default='Pending')
 
     def __str__(self):
         return f"{self.ext_id}"
