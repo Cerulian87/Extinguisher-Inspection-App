@@ -52,20 +52,6 @@ def getBox(request):
     serializer = BoxSerializer(box, many=True)
     return Response(serializer.data)
 
-# @api_view(['PATCH'])
-# def update_box_status(request, box_id):
-#     try:
-#         box = Box.objects.get(pk=box_id)
-#     except Box.DoesNotExist:
-#         return Response(status=404)
-
-#     status_id = request.data.get('status_id')
-#     if status_id is not None:
-#         box.status_id = status_id
-#         box.save()
-#         return Response(status=200)
-#     else:
-#         return Response(status=400, data={'message': 'Missing or invalid status_id'})
 
 @api_view(['PATCH'])
 def update_box_status(request, box_id):
@@ -97,6 +83,66 @@ def maintExtUpdate(request, ext_id):
     else:
         return Response(status=400, data={'message': 'Missing or invalid status_id'})
 
+@api_view(['PATCH'])
+def getWarehouseInspections(request, ext_id):
+    try:
+        extinguisher = TechAssignments.objects.get(ext_id=ext_id)
+    except Extinguisher.DoesNotExist:
+        return Response(status=404)
+
+    status_id = request.data.get('warehouse_status')
+    if status_id is not None:
+        extinguisher.warehouse_status = status_id
+        extinguisher.save()
+        return Response(status=200)
+    else:
+        return Response(status=400, data={'message': 'Missing or invalid status_id'})
+    
+@api_view(['POST'])
+def addNewExtinguisher(request):
+    data = request.data
+    ext_id = data.get('ext_id')
+    model_number = data.get('model_number')
+
+    if ext_id is None or model_number is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    status_id = "1"
+    warehouse_status = 'Pass'
+
+    extinguisher = Extinguisher.objects.filter(pk=ext_id).first()
+    if extinguisher is None:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    assignment = TechAssignments.objects.create(ext_id=extinguisher, status_id_id=status_id,
+                                                model_number=model_number, warehouse_status=warehouse_status)
+
+    return Response(status=status.HTTP_201_CREATED)
+
+@api_view(['POST'])
+def sendExtinguisherToTech(request):
+    data = request.data
+    ext_id = data.get('ext_id')
+    model_number = data.get('model_number')
+
+    if ext_id is None or model_number is None:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    status_id = "1"
+    warehouse_status = 'Pass'
+
+    extinguisher = Extinguisher.objects.filter(pk=ext_id).first()
+    if extinguisher is None:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    # Create TechAssignments object with pending status
+    assignment = TechAssignments.objects.create(ext_id=extinguisher, status_id_id=status_id,
+                                                model_number=model_number, warehouse_status='Pending')
+
+    return Response(status=status.HTTP_201_CREATED)
+
+
+
 @api_view(['GET'])
 def getExtinguishers(request):
     extinguishers = Extinguisher.objects.all()
@@ -121,7 +167,6 @@ def getTechExtinguishers(request):
 def getMyBoxes(request):
     user = request.user
     extstatuses = user.extstatus_set.all()
-    # extstatuses = ExtStatus.objects.all()
     serializer = ExtSerializer(extstatuses, many=True)
     return Response(serializer.data)
 
@@ -198,7 +243,6 @@ def getInspectorAssignments(request):
         if not assignments:
             return Response({'error':'assignments are required'}, status=status.HTTP_400_BAD_REQUEST)
         extinguishers = assignments.get('extinguishers', [])
-        # extinguishers = Extinguisher.objects.get(ext_id=ext_id)
         if not extinguishers:
             return Response({'error': 'extinguishers are required'}, status=status.HTTP_400_BAD_REQUEST)
         inspector_assignments = []
@@ -224,17 +268,4 @@ def deleteInspectorAssignment(request, ext_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def getNotes(request):
-#     note = Note.objects.all()
-#     serializer = NoteSerializer(note, many=True)
-#     return Response(serializer.data)
 
-# @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
-# def getNotes(request):
-#     user = request.user
-#     notes = user.note_set.all()
-#     serializer = NoteSerializer(notes, many=True)
-#     return Response(serializer.data)

@@ -40,10 +40,6 @@ class FloorPlanSerializer(ModelSerializer):
         model = FloorPlan
         fields = '__all__'
 
-# class UserSerializer(ModelSerializer):
-#     class Meta:
-#         model = User
-#         fields = ['username', 'first_name']
 
 class StaffSerializer(ModelSerializer):
     username = serializers.CharField(source='username.username')
@@ -52,8 +48,6 @@ class StaffSerializer(ModelSerializer):
         fields = '__all__'
 
 class InspectorAssignmentsSerializer(ModelSerializer):
-    # extinguisher = ExtinguisherSerializer()
-    # username = serializers.CharField(source='username.username')
     class Meta:
         model = InspectorAssignments
         fields = '__all__'
@@ -61,4 +55,9 @@ class InspectorAssignmentsSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     class Meta:
         model = User
+        fields = '__all__'
+
+class TechAssignmentsSerializer(ModelSerializer):
+    class Meta:
+        model = TechAssignments
         fields = '__all__'

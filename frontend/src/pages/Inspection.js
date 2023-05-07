@@ -158,38 +158,38 @@ const handleSubmit = async () => {
 
   return (
     
-   <div> 
-    <h1>
-    Inspection Checklist 
-    </h1>
-    <div>
-      <ul>
+   <div className='flex flex-col items-center'> 
 
-        {checklist.map((item, id) => (
-          <li key={id}>
-            {item.list_item}
-            {item.file_txt && <img src={item.file_txt} alt="Checklist Image" />}
-            {item.options.map((option, index) => (
-            <label key={index}>
-        <input 
-          type="radio"
-          value={option.value}
-          checked={item.selectedOption === option.value}
-          onChange={() => setChecklist(prevState => prevState.map((prevItem, itemIndex) => itemIndex === id ? {...prevItem, selectedOption: option.value} : prevItem))}
-        />
-        {option.label}
-      </label>
-    ))}
-  </li>
-))}
-<br />
-        
-      </ul>
+    <h1 class="text-3xl font-bold mb-8">Inspection Checklist</h1>
+    <div class="w-full">
+        <ul class="gap-4">
+            {checklist.map((item, id) => (
+                <li class="flex items-center" key={id}>
+                    <p class="flex-1 text-lg font-medium">{item.list_item}</p>
+                    {item.file_txt && <img src={item.file_txt} alt="Checklist Image" class="w-48 h-auto ml-4 m-3"/>}
+                    <div class="flex flex-col items-center justify-center">
+                        {item.options.map((option, index) => (
+                            <label class="flex items-center mr-3 hover:cursor-pointer" key={index}>
+                                <input 
+                                    type="radio"
+                                    value={option.value}
+                                    checked={item.selectedOption === option.value}
+                                    onChange={() => setChecklist(prevState => prevState.map((prevItem, itemIndex) => itemIndex === id ? {...prevItem, selectedOption: option.value} : prevItem))}
+                                    class="mr-2"
+                                />
+                                <span class="text-lg">{option.label}</span>
+                            </label>
+                        ))}
+                    </div>
+                </li>
+            ))}
+        </ul>
     </div>
-    <div>
-      <button onClick={handleCancel}>Cancel</button>
-      <button onClick={handleSubmit}>Submit</button>
+    <div class="flex justify-center mt-8">
+        <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md mr-3 mb-5" onClick={handleCancel}>Cancel</button>
+        <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md mb-5" onClick={handleSubmit}>Submit</button>
     </div>  
+
     </div>
        
   )

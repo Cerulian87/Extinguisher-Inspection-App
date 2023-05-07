@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -43,13 +43,13 @@ const MaintBoxRepair = () => {
 
 
   return (
-    <div>
+    <div className='items-center'>
         <div>
-            <h1>Maintainer Box Repair for Box: {box_id}</h1>
+            <h1 className='text-3xl font-bold mb-8'>Maintainer Box Repair for Box:<span className=' bg-gradient-to-br from-violet-500 to-blue-700 absolute rounded transform rotate-3'>{box_id}</span></h1>
         </div>
         <div>
-            <p>Has the Box been repaired?</p>
-            <label>
+            <p class='font-medium'>Has the Box been repaired?</p>
+            <label className='flex items-center justify-center hover:cursor-pointer'>
                 <input
                     type="radio"
                     value="yes"
@@ -57,7 +57,7 @@ const MaintBoxRepair = () => {
                     onChange={() => setBoxStatus("yes")} />
                     Yes
             </label>
-            <label>
+            <label className='flex items-center justify-center hover:cursor-pointer'>
                 <input
                     type="radio"
                     value="no"
@@ -66,9 +66,9 @@ const MaintBoxRepair = () => {
                     No
             </label>
         </div>
-        <div>
-            <button onClick={handleCancel}>Cancel</button>
-            <button onClick={handleSubmit}>Submit</button>
+        <div className='flex justify-center mt-8'>
+            <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md mr-3" onClick={handleCancel}>Cancel</button>
+            <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md" onClick={handleSubmit}>Submit</button>
         </div>
     </div>
   )

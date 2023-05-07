@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -41,23 +41,24 @@ const BoxInspection = () => {
   }};
   
     return (
-    <div>
+    <div className='items-center'>
         <div>
-            <h1>
+            <h1 className='text-3xl font-bold mb-8'>
                 Box Inspection
             </h1>
         </div>
         <div>
-            <p>Is there anything wrong with box {box_id}?</p>
-            <label>
+            <p className='font-medium'>Is there anything wrong with box <span className=' bg-gradient-to-br from-violet-500 to-blue-700 absolute rounded transform rotate-3'>{box_id}</span> <span className=' ml-12'>?</span></p>
+            <label className='flex items-center justify-center mt-5 hover:cursor-pointer'>
                 <input
                     type="radio"
                     value="yes"
                     checked={boxStatus === "yes"}
-                    onChange={() => setBoxStatus("yes")} />
+                    onChange={() => setBoxStatus("yes")} 
+                     />
                     Yes
             </label>
-            <label>
+            <label className='flex items-center justify-center hover:cursor-pointer' >
                 <input
                     type="radio"
                     value="no"
@@ -66,9 +67,9 @@ const BoxInspection = () => {
                     No
             </label>
         </div>
-        <div>
-            <button onClick={handleCancel}>Cancel</button>
-            <button onClick={handleSubmit}>Submit</button>
+        <div class="flex justify-center mt-8">
+            <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md mr-3" onClick={handleCancel}>Cancel</button>
+            <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md" onClick={handleSubmit}>Submit</button>
         </div>
     </div>
   )

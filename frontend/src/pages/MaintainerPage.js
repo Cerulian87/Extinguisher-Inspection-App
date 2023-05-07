@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import AuthContext from '../context/AuthContext';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const MaintainerPage = () => {
@@ -12,7 +12,6 @@ const MaintainerPage = () => {
   let {authTokens} = useContext(AuthContext)
 
   const navigate = useNavigate();
-  const location = useLocation();
 
   const startInspection = (ext_id) => {
     navigate({
@@ -87,48 +86,59 @@ const MaintainerPage = () => {
     }
 
   return (
-    <div>
-      <h1>MaintainerPage</h1>
-      <div>
-        <h3>
+    <div className='h-screen overflow-y-hidden'>
+      <h1 className='text-3xl font-bold mb-5'>Maintainer Page</h1>
+
+      <div className='overflow-y-hidden grid grid-cols-4 gap-4 h-full'>
+      <div className='p-4 col-span-1'>
+        <h3 className='text-xl font-bold mb-2 mt-8'>
           Extinguishers that need replaced:
         </h3>
         <ul>
           {sortedExtinguishers.map((extinguisher, id) => (
-            <li key={id} className='App-link' onClick={() => startInspection(extinguisher.ext_id)}>
+            <li key={id} className='App-link hover:font-bold' onClick={() => startInspection(extinguisher.ext_id)}>
               Ext: {extinguisher.ext_id} ({extinguisher.box_id})
             </li>
           ))}
         </ul>
         <div>
-          <h3>
+          <h3 className='text-xl font-bold mb-2 mt-8'>
             Boxes that need repaired:
           </h3>
           <ul>
             {boxes.map((box, id) => (
-              <li key={id} className='App-link' onClick={() => startBoxInspection(box.box_id)}>
+              <li key={id} className='App-link hover:font-bold' onClick={() => startBoxInspection(box.box_id)}>
                 {box.box_id}
               </li>
             ))}
           </ul>
         </div>
       </div>
-      <h3>
+      
+      <div className='p-4 col-span-3'>
+      <h3 className='text-lg font-bold mb-2'>
         Map
       </h3>
-        <div>
-          <ul>
+        
+        <div className='flex justify-end w-full h-auto'>
+          {activeFloorplan && <img src={`http://127.0.0.1:8000/api${activeFloorplan.file_txt}`} alt="Floorplan Image" className='flex max-w-full h-auto overflow-hidden'/>}
+        </div>
+
+          <div className='absolute right-1 top-28 h-full flex flex-col justify-between'>
+          <ul className='my-20'>
             {floorplans.map((floorplan, id) => (
-              <li key={id}>
-               <button onClick={() => handleFloorplanClick(floorplan)}>Floor {id + 1}</button>
+              <li key={id}> 
+                
+               <button onClick={() => handleFloorplanClick(floorplan)} className='bg-blue-500 text-white shadow-gray-700 shadow-md hover:shadow-gray-700 hover:shadow-lg  py-1 px-2 mb-1 rounded-md hover:bg-blue-700 text-sm font-bold w-full h-full' >{id + 1}</button>
               </li>
+
             ))}
           </ul>
+
+
         </div>
-        <div>
-          {activeFloorplan && <img src={`http://127.0.0.1:8000/api${activeFloorplan.file_txt}`} alt="Floorplan Image" />}
         </div>
-      
+      </div>
       </div>
   )
 }

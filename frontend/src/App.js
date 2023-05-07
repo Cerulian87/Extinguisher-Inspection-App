@@ -15,12 +15,14 @@ import BoxInspection from './pages/BoxInspection';
 import MaintExtinguisherInspection from './pages/MaintExtinguisherInspection';
 import MaintBoxRepair from './pages/MaintBoxRepair';
 import TechInspectionPage from './pages/TechInspectionPage';
+import ExtinguisherForm from './pages/ExtinguisherForm';
 
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {/* <header> */}
         <Router>
           <AuthProvider>
             <Header />
@@ -35,12 +37,14 @@ function App() {
             <Route element={<PrivateRoute><SupervisorPage/></PrivateRoute>} path='/supervisorpage' exact/>
             <Route element={<PrivateRoute><TechnicianPage/></PrivateRoute>} path='/technicianpage' exact/>
             <Route element={<PrivateRoute><TechInspectionPage/></PrivateRoute>} path='/techInspectionPage' exact/>
+            <Route element={<PrivateRoute><ExtinguisherForm/></PrivateRoute>} path='/extinguisherForm' exact/>
             <Route element={<LoginPage/>} path='/login' />
             <Route element={<RegisterPage/>} path='/register' />
           </Routes>
           </AuthProvider>
         </Router>
       </header>
+      <footer id="footer"/>
     </div>
   );
 }

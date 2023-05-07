@@ -161,16 +161,16 @@ const handleInspectorSelect = (inspector) => {
     <div>
 
     <div>
-      <h1>
-      SupervisorPage
+      <h1 className='text-3xl font-bold mb-8'>
+      Supervisor Page
       </h1>
       </div>
     <div>
-      <h3>
+      <h3 className='text-2xl font-bold mb-2'>
       Extinguisher Status
       </h3>
       </div>
-      <select multiple value={selectedExtinguishers} onChange={(e) => setSelectedExtinguishers(Array.from(e.target.selectedOptions, (option) => option.value))}>
+      <select className='text-black text-lg' multiple value={selectedExtinguishers} onChange={(e) => setSelectedExtinguishers(Array.from(e.target.selectedOptions, (option) => option.value))}>
   {extinguishers.map((extinguisher, id) => (
     <option key={id} value={extinguisher.ext_id} disabled={extinguisher.status_id === "2"}>
       Extinguisher: {extinguisher.ext_id} | Box: {extinguisher.box_id} {extinguisher.status_id === "1" ? "Good" : "Bad"}
@@ -180,22 +180,24 @@ const handleInspectorSelect = (inspector) => {
 
     <section>
       <div>
-      <h3>
+      <h3 className='mt-5 mb-3'>
       Inspectors
       </h3>
       </div>
-      <ul>
+      <ul className='flex items-center justify-center gap-4 mb-4'>
         
         {inspectors.map((inspector, id) => (
-          <li key={id}>
+          <li className='hover:cursor-pointer' key={id}>
             <input type='radio' name='inspector' value={inspector.id} onChange={() => handleInspectorSelect(inspector)} />
             {inspector.username.charAt(0).toUpperCase() + inspector.username.slice(1)}
           </li>
         ))}
       </ul>
     </section>
-    <button onClick={handleCancelSelection}>Cancel</button>
-    <button onClick={handleSendSelectedExtinguishers}>Send Extinguishers</button>
+    <div>
+    <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md mr-3" onClick={handleCancelSelection}>Cancel</button>
+    <button class="bg-blue-500 text-white text-sm font-bold py-1 px-2 shadow-lg shadow-opacity-50 hover:bg-blue-700 hover:py-2 hover:px-3 rounded-md" onClick={handleSendSelectedExtinguishers}>Submit</button>
+    </div>
     </div>
   )
 }

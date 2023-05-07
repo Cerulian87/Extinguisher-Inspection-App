@@ -96,54 +96,36 @@ const InspectorPage = () => {
 
 
   return (
-    <div>
-      <h1>
-      InspectorPage
-      </h1>
+    <div className='no-scrollbar h-screen overflow-y-hidden'>
+      <h1 className='text-3xl font-bold mb-5'>Inspector Page</h1>
+      <div className='no-scrollbar overflow-y-hidden grid grid-cols-4 gap-4 h-full'>
 
-      {/* <div>
-        <h3>
-          Boxes
-        </h3>
-      </div>
-      <div>
-        <ul>
-          {sortedBoxes.map((box, id) => (
-            <li key={id} className='App-link' onClick={() => startBoxInspection(box.box_id)}>{box.box_id}</li>
-          ))}
-        </ul>
-      </div> */}
+<div className='no-scrollbar p-4 col-span-1'>
+    <h3 className='no-scrollbar text-xl font-bold mb-2 mt-8'>Extinguisher Assignments</h3>
+    <ul>
+      {sortedExtinguishers.map((extinguisher, id) => (
+        <li key={id} className='App-link hover:font-bold' onClick={() => startInspection(extinguisher.ext_id)}>Ext: {extinguisher.ext_id}</li>
+      ))}
+    </ul>
+  </div>
 
-      <div>
-        <h3>
-        Extinguisher Assignments
-        </h3>
-        <div>
-          <ul>
-            {sortedExtinguishers.map((extinguisher, id) => (
-              <li key={id} className='App-link' onClick={() => startInspection(extinguisher.ext_id)}>Ext: {extinguisher.ext_id}</li>
-            ))}
-          </ul>
-        </div>
-      </div>
+  <div className='p-4 col-span-3'>
+    <h3 className='text-xl font-bold mb-2'>Map</h3>
+    <div className='flex justify-end w-full h-auto'>
+      {activeFloorplan && <img src={`http://127.0.0.1:8000/api${activeFloorplan.file_txt}`} alt='Floorplan Image' className='flex max-w-full h-auto overflow-hidden' />}
+    </div>
 
-      <section>
-        <h3>
-          Map
-        </h3>
-        <div>
-          <ul>
-            {floorplans.map((floorplan, id) => (
-              <li key={id}>
-               <button onClick={() => handleFloorplanClick(floorplan)}>Floor {id + 1}</button>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          {activeFloorplan && <img src={`http://127.0.0.1:8000/api${activeFloorplan.file_txt}`} alt="Floorplan Image" />}
-        </div>
-      </section> 
+    <div className='absolute right-1 top-28 h-full flex flex-col justify-between'>
+      <ul className='my-20'>
+        {floorplans.map((floorplan, id) => (
+          <li key={id}>
+            <button onClick={() => handleFloorplanClick(floorplan)} className='bg-blue-500 text-white shadow-gray-700 shadow-md hover:shadow-gray-700 hover:shadow-lg py-1 px-2 mb-1 rounded-md hover:bg-blue-700 text-sm font-bold w-full h-full'>{id + 1}</button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+  </div>
                 
       </div>
   )

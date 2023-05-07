@@ -25,7 +25,6 @@ class Staff(models.Model):
 
     def __str__(self) -> str:
         return f"{self.username}, {self.emp_type_id}"
-        # return f"{self.username.first_name}"
  
 
 class EmpType(models.Model):
@@ -42,7 +41,6 @@ class InspectorAssignments(models.Model):
     def __str__(self):
         return f"{self.ext_id} : {self.username}"
 
-# This is a test model for technicians to recieve a bad extinguisher 
 class TechAssignments(models.Model):
 
     warehouseStatuses = [
@@ -53,6 +51,7 @@ class TechAssignments(models.Model):
 
     ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
     status_id = models.ForeignKey('ExtStatus', on_delete=models.CASCADE)
+    model_number = models.CharField(max_length=50, null=True, blank=True)
     warehouse_status = models.CharField(max_length=50,
                                   choices=warehouseStatuses,
                                   default='Pending')
@@ -64,11 +63,10 @@ class TechAssignments(models.Model):
 class Checklist(models.Model):
 
 
-    # checklist_id = models.PositiveIntegerField(primary_key=True, default=1)
     checklist_id = models.CharField(max_length=5, primary_key=True, default=1) # Here's a fix for the API int type issue
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
     list_item = models.CharField(max_length=1500)
-    file_txt = models.ImageField(upload_to='images/', null=True, blank=True) # I need to figure out how to update a txt.file for this part
+    file_txt = models.ImageField(upload_to='images/', null=True, blank=True) 
 
     def __str__(self):
         return self.list_item
@@ -77,8 +75,7 @@ class Checklist(models.Model):
 
 class MaintStaff(models.Model):
     maint_id = models.CharField(max_length=10, primary_key=True)
-    # staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
-    username = models.ForeignKey(User, on_delete=models.CASCADE)    # Possibly change back to staff_id
+    username = models.ForeignKey(User, on_delete=models.CASCADE)    
     emp_type_id = models.ForeignKey('EmpType', on_delete=models.CASCADE)
     box_maint_id = models.ForeignKey('BoxMaint', on_delete=models.CASCADE)
     ext_maint_id = models.ForeignKey('ExtMaint', on_delete=models.CASCADE)
@@ -87,7 +84,6 @@ class BoxMaint(models.Model):
     box_maint_id = models.CharField(max_length=10, primary_key=True)
     disc_date_time = models.DateTimeField(auto_now_add=True, null=False) 
     fix_date_time = models.DateField(auto_now=True, null=True, blank=True)
-    # fix_by = models.CharField(max_length=5, null=True, blank=True) # Need to add the username to this field
     fix_by = models.ForeignKey(User, on_delete=models.CASCADE)   
     notes = models.TextField(max_length=500, null=True, blank=True)
 
@@ -123,32 +119,17 @@ class BoxSizes(models.Model):
         ('10', 'Large box')
     ]
 
-    # size_ID = models.PositiveSmallIntegerField(primary_key=True) 
     size_ID = models.CharField(max_length=2, primary_key=True) # Here's a fix for the API int type issue
     size = models.CharField(max_length=2,
                             choices=boxSizes,
-                            default=None)  # May need to fix this, not sure if 'None" is right
+                            default=None)  
 
     def __str__(self):
         return self.size
-# class Ext_Tag(models.Model):
 
-#     # boxSizes = [
-#     #     ('5', 'Small box'),
-#     #     ('10', 'Large box')
-#     # ]
-
-#     tag_id = models.CharField(max_length=10, primary_key=True)
-#     type_id = models.ForeignKey('Ext_Type', on_delete=models.CASCADE)
-#     size = models.CharField(max_length=2,
-#                             choices=boxSizes,
-#                             default=None)  # May need to fix this, not sure if 'None" is right
-#     status_id = models.ForeignKey('Ext_Status', on_delete=models.CASCADE)
 
 class ExtStatus(models.Model):
-    # status_id = models.PositiveSmallIntegerField(primary_key=True)
     status_id = models.CharField(max_length=5, primary_key=True) # Here's a fix for the API int type issue
-    # staff_id = models.ForeignKey('Staff', on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     data_time = models.DateTimeField(auto_now=True, null=True, blank=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
@@ -164,7 +145,6 @@ class InspStatus(models.Model):
         ('Fail', 'Extinguisher did not 100% Pass')
     ]
     
-    # insp_status = models.PositiveSmallIntegerField(primary_key=True)
     insp_status = models.CharField(max_length=4, primary_key=True) # Here's a fix for the API int type issue
     stat_desc = models.CharField(max_length=4,
                                  choices=descriptions,
@@ -195,12 +175,10 @@ class Box(models.Model):
         return f"Box: {self.box_id}"
 
 class BoxStatus(models.Model):
-    # status_id = models.PositiveSmallIntegerField(primary_key=True)
     status_id = models.CharField(max_length=5, primary_key=True)
     log_by = models.ForeignKey(User, on_delete=models.CASCADE)
     disc_date_time = models.DateTimeField(auto_now_add=True)
     notes = models.TextField(max_length=500, null=True, blank=True)
-    # comp_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     comp_by = models.CharField(max_length=100, null=True, blank=True)
     comp_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
 
@@ -209,11 +187,8 @@ class Building(models.Model):
     build_id = models.CharField(max_length=10, primary_key=True)
     build_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    # num_floors = models.PositiveSmallIntegerField()
     num_floors = models.CharField(max_length=5)
-    # num_ext = models.PositiveSmallIntegerField()
     num_ext = models.CharField(max_length=5)
-    # num_boxes = models.PositiveSmallIntegerFieldeld()
     num_boxes = models.CharField(max_length=5)
     layout_id = models.ForeignKey('FloorPlan', on_delete=models.CASCADE)
 
@@ -222,9 +197,8 @@ class Building(models.Model):
 
 class FloorPlan(models.Model):
     layout_id = models.CharField(max_length=10, primary_key=True)
-    # floor = models.PositiveSmallIntegerField()
     floor = models.CharField(max_length=5)
-    file_txt = models.ImageField() # I need to figure out how to update a txt.file for this part
+    file_txt = models.ImageField() 
 
     def __str__(self):
         return self.floor
@@ -237,19 +211,15 @@ class WareOps(models.Model):
     ext_id = models.ForeignKey('Extinguisher', on_delete=models.CASCADE)
     rec_by = models.ForeignKey(User, on_delete=models.CASCADE)
     rec_date_time = models.DateTimeField(auto_now_add=True)
-    # insp_s_id = models.PositiveSmallIntegerField(null=True, blank=True)
     insp_s_id = models.CharField(max_length=10, null=True, blank=True)
-    # insp_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     insp_by = models.CharField(max_length=100, null=True, blank=True)
     insp_date_time = models.DateTimeField(auto_now=True, null=True, blank=True)
 
 class EOLExt(models.Model):
-    # eol_id = models.PositiveSmallIntegerField(primary_key=True)
     eol_id = models.CharField(max_length=10, primary_key=True)
     w_ext_id = models.ForeignKey('WareOps', on_delete=models.CASCADE)
     eol_date_time = models.DateTimeField(auto_now=True)
 
-# Had to change the name of this. Migrating gave errors due to 2 tables with the same name
 class WInspStatus(models.Model):  
     
     warehouseInspectionStatus = [
@@ -259,7 +229,6 @@ class WInspStatus(models.Model):
         ('Decommissioned', 'Extinguisher was terminated')
     ]
 
-    # insp_s_id = models.PositiveSmallIntegerField(primary_key=True)
     insp_s_id = models.CharField(max_length=10, primary_key=True)
     desc = models.CharField(max_length=150,
                             choices=warehouseInspectionStatus,
@@ -272,27 +241,9 @@ class ReadyExt(models.Model):
 
 # ----- USER LOGIN RELATED TABLES -----
 
-# class Login(models.Model):
-#     login_id = models.CharField(max_length=30, primary_key=True)
-#     # login_id = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     # username = models.CharField(max_length=30, unique=True)
-#     username = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
-#     password = models.CharField(max_length=30)
-#     email = models.EmailField(max_length=150)
-#     staff_id = models.ForeignKey(User, on_delete=models.CASCADE)
-#     # auth_id = models.ForeignKey('Auth', on_delete=models.CASCADE)
-#     c_date = models.DateTimeField(auto_now_add=True)
-
-    
-
-# class Auth(models.Model):
-#     auth_id = models.CharField(max_length=5, primary_key=True)
-#     auth_type = models.CharField(max_length=20)
 
 class CLog(models.Model):
-    # c_log_id = models.PositiveSmallIntegerField(primary_key=True)
     c_log_id = models.CharField(max_length=10, primary_key=True)
-    # login_id = models.ForeignKey('Login', on_delete=models.CASCADE)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     t_changed = models.CharField(max_length=30) # Table changed
     i_changed = models.CharField(max_length=30) # Row changed
